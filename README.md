@@ -1,2 +1,9 @@
-# java-virtual-machine
-Implementation of Java Virtual Machine in C99.
+Java Virtual Machine
+====================
+Implementation of Java Virtual Machine for Java SE 8 version. The language used was C99.
+
+Building
+--------
+
+Running
+-------
