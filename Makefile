@@ -9,7 +9,7 @@ LIB_DIR = lib
 BIN_DIR = bin
 OBJ_DIR = $(SRC_DIR)/obj
 
-GCC = @gcc -g -Wall -I include
+GCC = @gcc -g -Wall -std=c99 -I include
 RM = @rm -rf
 MKDIR = @mkdir -p
 
@@ -22,6 +22,10 @@ run : clean all
 	@echo OK
 	@echo
 	@./$(PROG_BIN)
+
+docs:
+	@echo Generating documentation.....
+	@doxygen Doxyfile
 
 test:
 	@echo Em desenvolvimento

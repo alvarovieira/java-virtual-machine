@@ -19,6 +19,14 @@ To run the project, type:
 
     $ make run
 
+Documentation
+-------------
+To generate documentation, type:
+
+    $ make docs
+
+All the documentation will be generated at doc/ folder.        
+
 Project Structure
 -----------------
 
