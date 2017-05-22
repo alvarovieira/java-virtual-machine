@@ -35,3 +35,6 @@ bin
 # Debug files
 *.dSYM/
 *.su
+
+# Documentation
+#doc/
