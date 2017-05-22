@@ -3,7 +3,7 @@
  * @brief Command-line Interface library source.
  * @authors Ismael Coelho Medeiros (14/0083162)
  *
- * @description This file contains all the function source codes which has the
+ * This file contains all the function source codes which has the
  * signatures declared on the menu.h file.
  */
 
@@ -15,7 +15,18 @@
 #include "file.h"
 #include "menu.h"
 
+/**
+ * @brief Global variable for the userfile pointer.
+ *
+ * @todo Description
+ */
 FILE* userfilePointer = NULL;
+
+/**
+ * @brief Global variable for the userfile path.
+ * 
+ * @todo Description
+ */
 char userfilePath[255] = "";
 
 void menu() {

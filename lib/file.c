@@ -1,3 +1,12 @@
+/**
+ * @file file.c
+ * @brief File operations library source.
+ * @authors Ismael Coelho Medeiros (14/0083162)
+ *
+ * This file contains all the function source codes which has the
+ * signatures declared on the file.h file.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
