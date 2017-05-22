@@ -18,8 +18,6 @@ LIBS_OBJS = $(patsubst $(INCLUDE_DIR)/%.h, $(OBJ_DIR)/%.o, $(wildcard $(INCLUDE_
 all : clean $(PROG_BIN)
 
 run : clean all
-	@echo -n Running the program.....
-	@echo OK
 	@echo
 	@./$(PROG_BIN)
 

@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include "menu.h"
 
 int main() {
-    printf("Hi, I'm JVM 7\n");
+    clearScreen();
+    menu();
     return 0;
 }
