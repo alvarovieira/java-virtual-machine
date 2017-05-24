@@ -56,6 +56,13 @@ void viewerOption(int userOption);
 void jvm();
 
 /**
+ * @brief Process the user's option received on the JVM execution menu.
+ *
+ * @todo Description
+ */
+void jvmOption(int userOption);
+
+/**
  * @brief Shows the menu that let the user to choose some .class file.
  * 
  * @todo Description

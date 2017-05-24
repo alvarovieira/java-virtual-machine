@@ -1,6 +1,6 @@
 /**
  * @file common.h
- * @brief Common functions and types library header.
+ * @brief Common operations and types library header.
  * @authors Ismael Coelho Medeiros (14/0083162)
  * 
  * @todo Description
@@ -9,26 +9,28 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
+#include <stdint.h>
+
 /**
  * @brief "u1" unity type definition.
  * 
  * @todo Description
  */
-typedef unsigned char u1;
+typedef uint16_t u1;
 
 /**
  * @brief "u2" unity type definition.
  * 
  * @todo Description
  */
-typedef unsigned short u2;
+typedef uint16_t u2;
 
 /**
- * @brief "u3" unity type definition.
+ * @brief "u4" unity type definition.
  * 
  * @todo Description
  */
-typedef unsigned int u3;
+typedef uint32_t u4;
 
 /**
  * @brief Infinity loop macro definition.

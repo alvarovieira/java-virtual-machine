@@ -31,6 +31,30 @@ FILE* openFile(char filename[255], char* mode);
 uint8_t* read(FILE* fp, int offset, int bytes);
 
 /**
+ * @todo Brief
+ * @todo Description
+ * @todo Params
+ * @todo Return
+ */
+uint8_t readByte(FILE* fp, int offset);
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Params
+ * @todo Return
+ */
+uint16_t readWord(FILE* fp, int offset);
+
+ /**
+ * @todo Brief
+ * @todo Description
+ * @todo Params
+ * @todo Return
+ */
+uint32_t readDoubleWord(FILE* fp, int offset);
+
+/**
  * @brief Returns the size of some file.
  *
  * @todo Description

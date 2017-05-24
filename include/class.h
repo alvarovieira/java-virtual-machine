@@ -16,7 +16,9 @@
  * @todo Description
  */
 struct _class {
-    
+    u4 magic;
+    u2 majorVersion;
+    u2 minorVersion;
 };
 
 /**
@@ -25,5 +27,37 @@ struct _class {
  * @todo Description
  */
 typedef struct _class Class;
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+Class* readClassfile(FILE* fp);
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+u1 readU1(FILE* fp, int offset);
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+u2 readU2(FILE* fp, int offset);
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+u4 readU4(FILE* fp, int offset);
 
 #endif //_CLASS_H

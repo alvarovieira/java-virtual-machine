@@ -33,6 +33,36 @@ uint8_t* read(FILE* fp, int offset, int bytes) {
     return content;
 }
 
+uint8_t readByte(FILE* fp, int offset) {
+    uint8_t byte;
+
+    // Read byte
+    fseek(fp, offset, SEEK_SET);
+    fread(&byte, sizeof(uint8_t), 1, fp);
+
+    return byte;
+}
+
+uint16_t readWord(FILE* fp, int offset) {
+    uint16_t word;
+
+    // Read word
+    fseek(fp, offset, SEEK_SET);
+    fread(&word, sizeof(uint16_t), 1, fp);
+
+    return word;
+}
+
+uint32_t readDoubleWord(FILE* fp, int offset) {
+    uint32_t doubleWord;
+
+    // Read double word
+    fseek(fp, offset, SEEK_SET);
+    fread(&doubleWord, sizeof(uint32_t), 1, fp);
+
+    return doubleWord;
+}
+
 int fileSize(FILE* fp) {
     fseek(fp, 0, SEEK_END);
     return ftell(fp);

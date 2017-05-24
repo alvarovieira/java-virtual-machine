@@ -1,6 +1,6 @@
 /** 
  * @file stack.h
- * @brief Stack operations and types library.
+ * @brief Stack operations and types library header.
  * @authors Ismael Coelho Medeiros (14/0083162)
  *
  * @todo Description
