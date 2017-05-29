@@ -76,12 +76,10 @@ void menuOption(int userOption) {
     switch(userOption) {
         // Option #1: Open JVM
         case 1:
-            clearScreen();
             jvm();
             break;
         // Option #2: Open .class viewer    
         case 2:
-            clearScreen();
             viewer();
             break;
         // Invalid option    
@@ -120,9 +118,11 @@ void viewer() {
             printf("| This class: cp_info #%-39d |\n", class->thisClass);
             printf("| Super class: cp_info #%-38d |\n", class->superClass);
             printf("| Interfaces count: %-42d |\n", class->interfacesCount);
+            printf("| Fields count: %-46d |\n", class->fieldsCount);
             printf("|                                                              |\n");
             printf("|--------------------------------------------------------------|\n");
             printf("| -1) Contant pool                                             |\n");
+            printf("| -2) Interfaces                                               |\n");
             printf("|--------------------------------------------------------------|\n");
             printf("| 1) Choose another .class file                                |\n");
         
@@ -153,25 +153,30 @@ void viewer() {
 }
     
 void viewerOption(int userOption) {
+    clearScreen();
+
     switch(userOption) {
         case 1:
-            clearScreen();
             chooseFile();
             break;
         case 2:
-            clearScreen();
             jvm();
             break;
         case -1:
-            clearScreen();
             if (userfilePointer != NULL && userfilePath[0] != '\0') {
                 showConstantPool();
             } else {
                 printf("Invalid option! Please choose a valid one.\n");
             }
-            break;    
+            break;
+        case -2:
+            if (userfilePointer != NULL && userfilePath[0] != '\0') {
+                showInterfaces();
+            } else {
+                printf("Invalid option! Please choose a valid one.\n");
+            }
+            break; 
         default:
-            clearScreen();
             printf("Invalid option! Please choose a valid one.\n");
     }
 }
@@ -179,6 +184,11 @@ void viewerOption(int userOption) {
 
 void showConstantPool() {
     int userOption;
+
+    if (class->constantPoolCount == 0) {
+        printf("Empty array.\n");
+        return;
+    }
 
     forever {
         printf("|==============================================================|\n");
@@ -326,6 +336,27 @@ void showContant(ConstPoolInfo cpInfo) {
     clearScreen();
 }
 
+void showInterfaces() {
+    int interfacesIndex;
+
+    if (class->interfacesCount == 0) {
+        printf("Empty array.\n");
+        return;
+    }
+
+    printf("|==============================================================|\n");
+    printf("|                           Interfaces                         |\n");
+    printf("|==============================================================|\n");
+
+    for (interfacesIndex = 0; interfacesIndex < class->interfacesCount; interfacesIndex++) {
+        printf("| cp_info #%-48d |\n", class->interfaces[interfacesIndex]);
+    }
+    printf("|==============================================================|\n");
+    printf("Press enter to return...\n");
+    while(getchar() != '\n');
+    clearScreen();
+}
+
 void jvm() {
     int userOption;
     char* shortname = NULL;
@@ -376,21 +407,19 @@ void jvm() {
 }
 
 void jvmOption(int userOption) {
+    clearScreen();
+
     switch(userOption) {
         case 1:
-            clearScreen();
             chooseFile();
             break;
         case 2:
-            clearScreen();
             printf("Not Implemented Yet\n");
             break;    
         case 3:
-            clearScreen();
             viewer();
             break;
         default:
-            clearScreen();
             printf("Invalid option! Please choose a valid one.\n");
     }
 }

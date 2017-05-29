@@ -62,6 +62,12 @@ void showConstantPool();
 void showContant(ConstPoolInfo cpInfo);
 
 /**
+ * @todo Brief
+ * @todo Description
+ */
+void showInterfaces();
+
+/**
  * @brief Shows JVM execution menu.
  * 
  * @todo Description

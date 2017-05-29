@@ -81,6 +81,8 @@ struct _class {
     u2 thisClass;
     u2 superClass;
     u2 interfacesCount;
+    u2* interfaces;
+    u2 fieldsCount;
 };
 
 /**
@@ -123,6 +125,14 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount);
  * @todo Return
  */
 Class* readClassfile(FILE* fp);
+
+/**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount);
 
 /**
  * @todo Brief

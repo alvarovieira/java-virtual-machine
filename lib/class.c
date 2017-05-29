@@ -41,7 +41,12 @@ Class* readClassfile(FILE* fp) {
     offset += 2;
 
     class->interfacesCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
-    offset += 2; 
+    offset += 2;
+
+    class->interfaces = readInterfaces(fp, &offset, class->interfacesCount);
+
+    class->fieldsCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
+    offset += 2;
 
     return class;
 }
@@ -139,6 +144,19 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
     }
 
     return cpInfo;
+}
+
+u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount) {
+    int interfacesIndex;
+
+    u2* interfaces = (u2*) malloc(interfacesCount * sizeof(u2));
+
+    for (interfacesIndex = 0; interfacesIndex < interfacesCount; interfacesIndex++) {
+        interfaces[interfacesIndex] = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+        (*offset) += 2;
+    }
+
+    return interfaces;
 }
 
 u1 readU1(FILE* fp, int offset) {
