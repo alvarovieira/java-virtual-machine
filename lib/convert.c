@@ -8,7 +8,7 @@
  */
 #include "stdint.h"
 
-uint8_t smallEndianToBigEndian1Bytes(uint8_t src) {
+uint8_t smallEndianToBigEndian1Byte(uint8_t src) {
     uint8_t aux = src & 0xF0;
     return (src << 4) | (aux >> 4);
 }

@@ -17,7 +17,7 @@
  * @todo Parameters
  * @todo Return
  */
-uint8_t smallEndianToBigEndian1Bytes(uint8_t src);
+uint8_t smallEndianToBigEndian1Byte(uint8_t src);
 
 /**
  * @todo Brief
