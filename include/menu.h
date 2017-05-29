@@ -11,6 +11,7 @@
 #define _MENU_H
 
 #include <stdio.h>
+#include "class.h"
 
 /** 
  * @brief Shows the JVM main menu.
@@ -47,6 +48,18 @@ void viewer();
  * @todo Description
  */
 void viewerOption(int userOption);
+
+/**
+ * @todo Brief
+ * @todo Description
+ */
+void showConstantPool();
+
+/**
+ * @todo Brief
+ * @todo Description
+ */
+void showContant(ConstPoolInfo cpInfo);
 
 /**
  * @brief Shows JVM execution menu.

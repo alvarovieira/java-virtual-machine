@@ -30,6 +30,12 @@ FILE* userfilePointer = NULL;
  */
 char userfilePath[255] = "";
 
+/**
+ * @todo Brief
+ * @todo Description
+ */
+Class* class = NULL;
+
 void menu() {
     int userOption;
 
@@ -43,7 +49,7 @@ void menu() {
         printf("| 2) Classfile Viewer                                          |\n");
         printf("| 3) Quit                                                      |\n");
         printf("|==============================================================|\n");
-        printf(" Choose some option: ");
+        printf(" Choose one of the option (1-3): ");
 
         // Read and process user's option
         scanf("%d", &userOption);
@@ -70,10 +76,12 @@ void menuOption(int userOption) {
     switch(userOption) {
         // Option #1: Open JVM
         case 1:
+            clearScreen();
             jvm();
             break;
         // Option #2: Open .class viewer    
         case 2:
+            clearScreen();
             viewer();
             break;
         // Invalid option    
@@ -86,7 +94,6 @@ void viewer() {
     int userOption;
     char* shortname = NULL;
 
-    clearScreen();
     forever {
 
         // Get short name of the userfile path
@@ -100,15 +107,22 @@ void viewer() {
         // Only the userfile path is sets prints the short name
         if (userfilePointer != NULL && userfilePath[0] != '\0') {
 
-            Class* class = readClassfile(userfilePointer);
             printf("| Chosen file: %-47s |\n", shortname);
             printf("| Size (bytes): %-46d |\n", fileSize(userfilePointer));
             printf("|--------------------------------------------------------------|\n");
-            printf("| Class:                                                       |\n");
+            printf("| General Information:                                         |\n");
             printf("|                                                              |\n");
-            printf("| Magic: 0x%8X                                            |\n", class->magic);
-            printf("| Minor Version: %-45u |\n", class->minorVersion);
-            printf("| Major Version: %-45d |\n", class->majorVersion);
+            printf("| Magic: 0x%.8X                                            |\n", class->magic);
+            printf("| Minor version: %-45u |\n", class->minorVersion);
+            printf("| Major version: %-45d |\n", class->majorVersion);
+            printf("| Contant pool count: %-40d |\n", class->constantPoolCount);
+            printf("| Access flags: 0x%.4X                                         |\n", class->accessFlags);
+            printf("| This class: cp_info #%-39d |\n", class->thisClass);
+            printf("| Super class: cp_info #%-38d |\n", class->superClass);
+            printf("| Interfaces count: %-42d |\n", class->interfacesCount);
+            printf("|                                                              |\n");
+            printf("|--------------------------------------------------------------|\n");
+            printf("| -1) Contant pool                                             |\n");
             printf("|--------------------------------------------------------------|\n");
             printf("| 1) Choose another .class file                                |\n");
         
@@ -122,7 +136,7 @@ void viewer() {
         printf("| 2) Open JVM                                                  |\n");
         printf("| 3) Back                                                      |\n");
         printf("|==============================================================|\n");
-        printf("Choose one of the following options: ");
+        printf("Choose one of the options (1-3): ");
 
         // Read and process user's option
         scanf("%d", &userOption);
@@ -148,17 +162,174 @@ void viewerOption(int userOption) {
             clearScreen();
             jvm();
             break;
+        case -1:
+            clearScreen();
+            if (userfilePointer != NULL && userfilePath[0] != '\0') {
+                showConstantPool();
+            } else {
+                printf("Invalid option! Please choose a valid one.\n");
+            }
+            break;    
         default:
             clearScreen();
             printf("Invalid option! Please choose a valid one.\n");
     }
 }
 
+
+void showConstantPool() {
+    int userOption;
+
+    forever {
+        printf("|==============================================================|\n");
+        printf("|                         Constant Pool                        |\n");
+        printf("|==============================================================|\n");
+        int cpIndex;
+        for (cpIndex = 0; cpIndex < class->constantPoolCount - 1; cpIndex++) {
+            switch(class->constantPool[cpIndex].tag) {
+                case UTF8:
+                    printf("| [%-3d] CONSTANT_Utf8_Info                                     |\n", cpIndex + 1);
+                    break;
+
+                case INTEGER:
+                    printf("| [%-3d] CONSTANT_Integer_Info                                  |\n", cpIndex + 1);
+                    break;
+
+                case FLOAT:
+                    printf("| [%-3d] CONSTANT_Float_Info                                    |\n", cpIndex + 1);
+                    break;
+
+                case LONG:
+                    printf("| [%-3d] CONSTANT_Long_Info                                     |\n", cpIndex + 1);
+                    break;
+
+                case DOUBLE:
+                    printf("| [%-3d] CONSTANT_Double_Info                                   |\n", cpIndex + 1);
+                    break;
+
+                case CLASS:
+                    printf("| [%-3d] CONSTANT_Class_Info                                    |\n", cpIndex + 1);
+                    break;
+
+                case STRING:
+                    printf("| [%-3d] CONSTANT_String_Info                                   |\n", cpIndex + 1);
+                    break;
+
+                case FIELD_REF:
+                    printf("| [%-3d] CONSTANT_Fieldref_Info                                 |\n", cpIndex + 1);
+                    break;
+
+                case METHOD_REF:
+                    printf("| [%-3d] CONSTANT_Methodref_Info                                |\n", cpIndex + 1);
+                    break;
+
+                case INTERFACE_METHOD_REF:
+                    printf("| [%-3d] CONSTANT_InterfaceMethodref_Info                       |\n", cpIndex + 1);
+                    break;
+
+                case NAME_AND_TYPE:
+                    printf("| [%-3d] CONSTANT_NameAndType_Info                              |\n", cpIndex + 1);
+                    break;
+            }
+        }
+        printf("|--------------------------------------------------------------|\n");
+        printf("| 1) Choose a constant                                         |\n");
+        printf("| 2) Back                                                      |\n");
+        printf("|==============================================================|\n");
+        printf("Choose one of the options (1-2): ");
+
+        // Read and process user's option
+        scanf("%d", &userOption);
+        while(getchar() != '\n');
+
+        // Process user option
+        if (userOption == 1) { // Option #1: Choose a contant
+            forever {
+
+                // Ask for the constant index
+                int chosenConst;
+                printf("Index: ");
+                scanf("%d", &chosenConst);
+                while(getchar() != '\n');
+
+                // Verify index correctness
+                if (chosenConst > 0 && chosenConst < (class->constantPoolCount)) {
+                    clearScreen();
+                    showContant(class->constantPool[chosenConst - 1]);
+                    break;
+                } else {
+                    printf("Invalid option! Please choose a valid one.\n");
+                }
+            }
+        } else if (userOption == 2) { // Option #2: Go back to previous page
+            clearScreen();
+            break;
+        } else { // Invalid option
+            clearScreen();
+            printf("Invalid option! Please choose a valid one.\n");
+        }
+    }
+}
+
+void showContant(ConstPoolInfo cpInfo) {
+    printf("|==============================================================|\n");
+    switch(cpInfo.tag) {
+        case UTF8:
+            printf("|                      CONSTANT_Utf8_Info                      |\n");
+            break;
+
+        case INTEGER:
+            printf("|                     CONSTANT_Integer_Info                    |\n");
+            break;
+
+        case FLOAT:
+            printf("|                      CONSTANT_Float_Info                     |\n");
+            break;
+
+        case LONG:
+            printf("|                      CONSTANT_Long_Info                      |\n");
+            break;
+
+        case DOUBLE:
+            printf("|                     CONSTANT_Double_Info                     |\n");
+            break;
+
+        case CLASS:
+            printf("|                      CONSTANT_Class_Info                     |\n");
+            break;
+
+        case STRING:
+            printf("|                     CONSTANT_String_Info                     |\n");
+            break;
+
+        case FIELD_REF:
+            printf("|                    CONSTANT_Fieldref_Info                    |\n");
+            break;
+
+        case METHOD_REF:
+            printf("|                    CONSTANT_Methodref_Info                   |\n");
+            break;
+
+        case INTERFACE_METHOD_REF:
+            printf("|               CONSTANT_InterfaceMethodref_Info               |\n");
+            break;
+
+        case NAME_AND_TYPE:
+            printf("|                  CONSTANT_NameAndType_Info                   |\n");
+            break;
+    }
+    printf("|==============================================================|\n");
+    // TODO: Fazer o vizualizador de cada tipo de cp_info
+    printf("|==============================================================|\n");
+    printf("Press enter to return...\n");
+    while(getchar() != '\n');
+    clearScreen();
+}
+
 void jvm() {
     int userOption;
     char* shortname = NULL;
 
-    clearScreen();
     forever {
 
         // Get short name of the userfile path
@@ -188,7 +359,7 @@ void jvm() {
         printf("| 3) Classfile viewer                                          |\n");
         printf("| 4) Back                                                      |\n");
         printf("|==============================================================|\n");
-        printf("Choose one of the following options: ");
+        printf("Choose one of the options (1-4): ");
 
         // Read and process user's option
         scanf("%d", &userOption);
@@ -264,6 +435,8 @@ void chooseFile() {
                 // Update with new userfile reference and path
                 userfilePointer = tempPointer;
                 strcpy(userfilePath, tempPath);
+                // Update classfile
+                class = readClassfile(userfilePointer);
                 // Return the previous menu
                 goto fileAccepted;
 
