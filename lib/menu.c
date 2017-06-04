@@ -188,7 +188,7 @@ void viewerOption(int userOption) {
             break; 
         case -4:
             if (userfilePointer != NULL && userfilePath[0] != '\0') {
-                //showAttributes();
+                showAttributes();
             } else {
                 printf("Invalid option! Please choose a valid one.\n");
             }
@@ -373,6 +373,327 @@ void showInterfaces() {
     printf("Press enter to return...\n");
     while(getchar() != '\n');
     clearScreen();
+}
+
+void showAttributes() {
+    int attributesIndex;
+
+    if(class->attributesCount == 0) {
+        printf("Empty attribute.\n");
+        return;
+    }
+
+    printf("|==============================================================|\n");
+    printf("|                           Attributes                         |\n");
+    printf("|==============================================================|\n");
+    printf("%x\n", class->attributes[0].attributeLength );
+    getchar();
+
+    for (attributesIndex = 0; attributesIndex < class->attributesCount - 1; attributesIndex++) {
+        switch
+    }
+}
+
+void leitor_bytecode(u1* bytecode, u4 tam) {
+
+    int aux;
+
+    for(aux = 0; aux < tam; aux++)
+    {
+        fread(&bytecode[aux], sizeof(u1), 1, fp);
+
+        switch (bytecode[aux])
+        {
+
+        case 0x10://bipush
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x11://sipush
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x12://ldc
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x13://ldc_w
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x14://ldc2_w
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x15://iload
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x16://lload
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x17://fload
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x18://dload
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+
+        case 0x19://aload
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x36://istore
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x37://lstore
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x38://fstore
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x39://dstore
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0x3a://astore
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb2://Getstatic
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb3://putstatic
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb4://getfield
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb5://Putfield
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb6://Invoke virtual
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb7://Invokespecial
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb8://Invoke static
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xb9://Invokeinterface
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xbb://new
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xbc://newarray
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //atype
+            break;
+
+        case 0xbd://anewarray
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xc0://checkcast
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xc1://instanceof
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);
+            break;
+
+        case 0xc4://wide
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp); //opcode da instrução modificada
+
+            if(bytecode[aux] == 0x84) //Se o opcode for iinc
+            {
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);  //indexbyte1
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);  //indexbyte2
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);  //constbyte1
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);  //constbyte2
+            }
+            else    //se o opcode for iload, fload, aload, lload, dload, istore, fstore, astore, lstore, dstore, ou ret
+            {
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);
+                aux++;
+                fread(&bytecode[aux], sizeof(u1), 1, fp);
+            }
+            break;
+
+        case 0xc5://multianewarray
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //indexbyte1
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //indexbyte2
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //dimension
+            break;
+
+        case 0xc6://ifnull
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte1
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte2
+
+            break;
+
+        case 0xc7://ifnonnull
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte1
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte2
+
+            break;
+
+        case 0xc8://goto_w
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte1
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte2
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte3
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte4
+
+
+            break;
+
+        case 0xc9://jsr_w
+
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte1
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte2
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte3
+            aux++;
+            fread(&bytecode[aux], sizeof(u1), 1, fp);  //branchbyte4
+
+
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void jvm() {
