@@ -13,7 +13,8 @@
 #include "file.h"
 
 FILE* openFile(char filename[255], char* mode) {
-    FILE* fp = fopen(filename, mode);
+    /* somente para agilizar os testes */
+    FILE* fp = fopen("/Users/alvarovieira/Documents/java-virtual-machine/etc/Program.class", mode);
     if (fp == NULL) {
         printf("An error occurr while trying to open the file\n");
     }

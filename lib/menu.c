@@ -119,7 +119,8 @@ void viewer() {
             printf("| Super class: cp_info #%-38d |\n", class->superClass);
             printf("| Interfaces count: %-42d |\n", class->interfacesCount);
             printf("| Fields count: %-46d |\n", class->fieldsCount);
-            printf("|                                                              |\n");
+            printf("| Methods count: %-45d |\n", class->methodsCount);
+            printf("| Attributes count: %-42d |\n",class->attributesCount);                          
             printf("|--------------------------------------------------------------|\n");
             printf("| -1) Contant pool                                             |\n");
             printf("| -2) Interfaces                                               |\n");
