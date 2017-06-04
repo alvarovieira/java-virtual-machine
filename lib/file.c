@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "mem-manager.h"
 #include "file.h"
 
 FILE* openFile(char filename[255], char* mode) {
@@ -24,7 +25,7 @@ uint8_t* read(FILE* fp, int offset, int bytes) {
     uint8_t* content;
 
     // Alocate with file size
-    content = (uint8_t*) malloc(sizeof(uint8_t) * bytes);
+    content = (uint8_t*) allocate(sizeof(uint8_t) * bytes);
 
     // Read file
     fseek(fp, offset, SEEK_SET);

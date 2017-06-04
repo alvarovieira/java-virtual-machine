@@ -9,13 +9,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "mem-manager.h"
 #include "file.h"
 #include "convert.h"
 #include "class.h"
 
 Class* readClassfile(FILE* fp) {
     int offset = 0;
-    Class* class = (Class*) malloc(sizeof(Class));
+    Class* class = (Class*) allocate(sizeof(Class));
 
     class->magic = readU4(fp, offset);
     offset += 4;
@@ -55,7 +56,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
     int cpIndex;
 
     // Allocate space for the costant pool
-    ConstPoolInfo* cpInfo = (ConstPoolInfo*) malloc(cpCount * sizeof(ConstPoolInfo));
+    ConstPoolInfo* cpInfo = (ConstPoolInfo*) allocate(cpCount * sizeof(ConstPoolInfo));
 
     for (cpIndex = 0; cpIndex < cpCount; cpIndex++) {
 
@@ -68,7 +69,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
             case UTF8:
                 cpInfo[cpIndex].utf8Const.length = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
                 (*offset) += 2;
-                cpInfo[cpIndex].utf8Const.bytes = (u1*) malloc((cpInfo[cpIndex].utf8Const.length) * sizeof(u1));
+                cpInfo[cpIndex].utf8Const.bytes = (u1*) allocate((cpInfo[cpIndex].utf8Const.length) * sizeof(u1));
                 for (int utf8Index = 0; utf8Index < (cpInfo[cpIndex].utf8Const.length); utf8Index++) {
                     cpInfo[cpIndex].utf8Const.bytes[utf8Index] = smallEndianToBigEndian1Byte(readU1(fp, (*offset)));
                     (*offset)++;
@@ -149,7 +150,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
 u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount) {
     int interfacesIndex;
 
-    u2* interfaces = (u2*) malloc(interfacesCount * sizeof(u2));
+    u2* interfaces = (u2*) allocate(interfacesCount * sizeof(u2));
 
     for (interfacesIndex = 0; interfacesIndex < interfacesCount; interfacesIndex++) {
         interfaces[interfacesIndex] = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));

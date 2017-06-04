@@ -45,7 +45,7 @@ typedef struct _stack Stack;
  * @todo Parameters
  * @todo Return
  */
-Stack* init(void* firstElemRef);
+Stack* stkInit(void* firstElemRef);
 
 /**
  * @brief Push operation on the stack.
@@ -55,7 +55,7 @@ Stack* init(void* firstElemRef);
  *
  * @todo Parameters
  */
-void push(Stack** stackRef, void* elemRef);
+void stkPush(Stack** stackRef, void* elemRef);
 
 /**
  * @brief Pop operation on the stack.
@@ -68,7 +68,7 @@ void push(Stack** stackRef, void* elemRef);
  * @todo Parameters
  * @todo Return
  */
-Stack* pop(Stack** stackRef);
+Stack* stkPop(Stack** stackRef);
 
 /**
  * @brief Dealocate Stack reference.
@@ -78,7 +78,7 @@ Stack* pop(Stack** stackRef);
  *
  * @todo Parameters
  */
-void delete(Stack** stackRef);
+void stkDelete(Stack** stackRef);
 
 /**
  * @brief Get head's element of the stack.
@@ -88,6 +88,6 @@ void delete(Stack** stackRef);
  * @todo Parameters
  * @todo Return
  */
-void* head(Stack* stackRef);
+void* stkHead(Stack* stackRef);
 
 #endif

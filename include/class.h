@@ -15,7 +15,15 @@
  * @todo Description
  */
 struct _const_pool_info {
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u1 tag;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     union {
         struct {
             u2 nameIndex;
@@ -72,16 +80,60 @@ typedef struct _const_pool_info ConstPoolInfo;
  * @todo Description
  */
 struct _class {
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u4 magic;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 majorVersion;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 minorVersion;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 constantPoolCount;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     ConstPoolInfo* constantPool;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 accessFlags;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 thisClass;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 superClass;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 interfacesCount;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2* interfaces;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 fieldsCount;
 };
 

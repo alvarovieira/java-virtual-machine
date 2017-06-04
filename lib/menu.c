@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "mem-manager.h"
 #include "class.h"
 #include "common.h"
 #include "file.h"
@@ -62,6 +63,8 @@ void menu() {
             if (userfilePointer != NULL) {
                 closeFile(&userfilePointer);
             }
+            // Free all allocated memory
+            freeMemManager();
 
             break;
         }
