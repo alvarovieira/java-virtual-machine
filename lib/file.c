@@ -14,8 +14,8 @@
 
 FILE* openFile(char filename[255], char* mode) {
     /* somente para agilizar os testes */
-    //FILE* fp = fopen("/Users/alvarovieira/Documents/java-virtual-machine/etc/Program.class", mode);
-    FILE* fp = fopen(filename, mode);
+    FILE* fp = fopen("/Users/victorguedes/Documents/UnB/sb/java-virtual-machine/etc/Program.class", mode);
+    //FILE* fp = fopen(filename, mode);
     if (fp == NULL) {
         printf("An error occurr while trying to open the file\n");
     }

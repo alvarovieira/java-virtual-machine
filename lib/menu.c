@@ -181,7 +181,7 @@ void viewerOption(int userOption) {
             break; 
         case -3:
             if (userfilePointer != NULL && userfilePath[0] != '\0') {
-                //showMethods();
+                showMethods();
             } else {
                 printf("Invalid option! Please choose a valid one.\n");
             }
@@ -375,6 +375,27 @@ void showInterfaces() {
     clearScreen();
 }
 
+void showMethods(){
+    
+    int methodsIndex;
+    if(class->methodsCount == 0){
+        printf("Empty Array\n");
+        return;
+    }
+    printf("|==============================================================|\n");
+    printf("|                           Methods                            |\n");
+    printf("|==============================================================|\n");
+
+    for (methodsIndex = 0; methodsIndex < class->methodsCount; methodsIndex++){
+        printf("| cp_info #%-48d |\n", class->methods[methodsIndex]);
+    }
+    printf("|==============================================================|\n");
+    printf("Press enter to return...\n");
+    while(getchar() != '\n');
+    clearScreen();
+
+}
+
 void jvm() {
     int userOption;
     char* shortname = NULL;
@@ -505,6 +526,8 @@ void chooseFile() {
             break;  
     }
 }
+
+
 
 char* getShortName() {
     int lastBar, i;

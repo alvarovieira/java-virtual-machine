@@ -65,6 +65,9 @@ void showContant(ConstPoolInfo cpInfo);
  * @todo Brief
  * @todo Description
  */
+
+void showMethods();
+
 void showInterfaces();
 
 /**
