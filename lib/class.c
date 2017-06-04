@@ -51,17 +51,17 @@ Class* readClassfile(FILE* fp) {
     offset += 2;
 
     class->fields = readFields(fp, &offset, class->fieldsCount);
-/*
+
     class->methodsCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
     offset += 2;
 
-    class->methods = readMethods(fp, &offsetm class->methodsCount);
+    class->methods = readMethods(fp, &offset, class->methodsCount);
 
     class->attributesCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
     offset += 2;
 
-    class->attributes = readAttributes(fp, &offsetm class->attributesCount);
-*/
+    class->attributes = readAttributes(fp, &offset, class->attributesCount);
+
     return class;
 }
 

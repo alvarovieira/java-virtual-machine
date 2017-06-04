@@ -120,10 +120,12 @@ void viewer() {
             printf("| Interfaces count: %-42d |\n", class->interfacesCount);
             printf("| Fields count: %-46d |\n", class->fieldsCount);
             printf("| Methods count: %-45d |\n", class->methodsCount);
-            printf("| Attributes count: %-42d |\n",class->attributesCount);                          
+            printf("| Attributes count: %-42d |\n",class->attributesCount);   // falta debugar                        
             printf("|--------------------------------------------------------------|\n");
             printf("| -1) Contant pool                                             |\n");
             printf("| -2) Interfaces                                               |\n");
+            printf("| -3) Methods                                                  |\n");
+            printf("| -4) Attributes                                                 |\n");
             printf("|--------------------------------------------------------------|\n");
             printf("| 1) Choose another .class file                                |\n");
         
@@ -177,6 +179,21 @@ void viewerOption(int userOption) {
                 printf("Invalid option! Please choose a valid one.\n");
             }
             break; 
+        case -3:
+            if (userfilePointer != NULL && userfilePath[0] != '\0') {
+                //showMethods();
+            } else {
+                printf("Invalid option! Please choose a valid one.\n");
+            }
+            break; 
+        case -4:
+            if (userfilePointer != NULL && userfilePath[0] != '\0') {
+                //showAttributes();
+            } else {
+                printf("Invalid option! Please choose a valid one.\n");
+            }
+            break; 
+
         default:
             printf("Invalid option! Please choose a valid one.\n");
     }
