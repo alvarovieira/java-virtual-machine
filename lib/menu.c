@@ -377,7 +377,7 @@ void showInterfaces() {
 
 void showMethods(){
     
-    int methodsIndex;
+    int methodsIndex, j;
     if(class->methodsCount == 0){
         printf("Empty Array\n");
         return;
@@ -385,14 +385,32 @@ void showMethods(){
     printf("|==============================================================|\n");
     printf("|                           Methods                            |\n");
     printf("|==============================================================|\n");
+    printf("Methods Count: %d \n\n", class->methodsCount);
 
-    for (methodsIndex = 0; methodsIndex < class->methodsCount; methodsIndex++){
-        printf("| cp_info #%-48d |\n", class->methods[methodsIndex]);
+    for (methodsIndex = 0; methodsIndex < class->methodsCount; ++methodsIndex)
+    {
+        printf("\n---- Method %d ----\n\n", methodsIndex);
+        printf("Name: cp_info#%-48d\n", class->methods[methodsIndex].nameIndex);
+        printf("Descriptor: cp_info#%-48d\n", class->methods[methodsIndex].descriptorIndex);
+        printf("Acess flag: %-48d\n", class->methods[methodsIndex].accessFlags);
+        
+        /*printf(out, "\t%s\n\n",constantes[methods[methodsIndex].method_name_index-1].u_info.palavra);
+        printf(out, "Descriptor index: %d\n", methods[i].method_descriptor_index);
+        printf(out, "\t%s\n\n",constantes[methods[i].method_descriptor_index-1].u_info.palavra);
+        printf(out, "Attribute Count: %d \n", methods[i].method_attributes_count);*/
+
+        for (j = 0; j < 2; ++j)
+        {
+            printf( "\n- Att %d -\n", j);
+            //printf("Attribute length: %-48d\n", class->methods[methodsIndex].attributes[j].attributeLength);
+            //printf("NAME:  cp_info#%-48d\n", class->methods[methodsIndex].attributes[j].attributeNameIndex);
+            //printf("DESCRIPTOR: cp_info#%-48d\n", class->methods[methodsIndex].attributes[j].fieldInfo);
+            //fputs("Attribute info:\n", out);
+            //fputs("\tTipo: ", out);
+
+        }
+        
     }
-    printf("|==============================================================|\n");
-    printf("Press enter to return...\n");
-    while(getchar() != '\n');
-    clearScreen();
 
 }
 

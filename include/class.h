@@ -187,20 +187,20 @@ enum {
     NAME_AND_TYPE = 12
 } Contants;
 
-/*
+
 enum {
-    ACC_PUBLIC 
-    ACC_PRIVATE
-    ACC_PROTECTED
-    ACC_STATIC
-    ACC_FINAL
-    ACC_SYNCHRONIZED
-    ACC_NATIVE
-    ACC_ABSTRACT
+    ACC_PUBLIC, 
+    ACC_PRIVATE,
+    ACC_PROTECTED,
+    ACC_STATIC,
+    ACC_FINAL,
+    ACC_SYNCHRONIZED,
+    ACC_NATIVE,
+    ACC_ABSTRACT,
     ACC_STRICT
 
 } methodAccessFlags;
-*/
+
 
 /**
  * @todo Brief
