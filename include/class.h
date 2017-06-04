@@ -55,15 +55,28 @@ struct _const_pool_info {
             u4 bytes;
         } integerConst;
         struct {
-            u4 bytes;
+            union {
+                u4 bytes;
+                float value;
+            };
         } floatConst;
         struct {
-            u4 highBytes;
-            u4 lowBytes;
+            union {
+                struct {
+                    u4 lowBytes;
+                    u4 highBytes;
+                } bytes;
+                long int value;
+            };
         } longConst;
         struct {
-            u4 highBytes;
-            u4 lowBytes;
+            union {
+                struct {
+                    u4 lowBytes;
+                    u4 highBytes;
+                } bytes;
+                double value;
+            };
         } doubleConst;
     };
 };
@@ -149,6 +162,7 @@ typedef struct _class Class;
  * @todo Description
  */
 enum {
+    LARGE_NUMERIC_CONTINUED = 0,
     UTF8 = 1,
     INTEGER = 3,
     FLOAT = 4,

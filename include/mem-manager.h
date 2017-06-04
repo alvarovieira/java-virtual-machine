@@ -13,6 +13,8 @@
 #ifndef _MEM_MANAGER_H
 #define _MEM_MANAGER_H
 
+#include <stdlib.h>
+
 /**
  * @brief Memory Manager structure definition.
  *

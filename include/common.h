@@ -16,7 +16,7 @@
  * 
  * @todo Description
  */
-typedef uint16_t u1;
+typedef uint8_t u1;
 
 /**
  * @brief "u2" unity type definition.

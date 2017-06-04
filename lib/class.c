@@ -18,7 +18,7 @@ Class* readClassfile(FILE* fp) {
     int offset = 0;
     Class* class = (Class*) allocate(sizeof(Class));
 
-    class->magic = readU4(fp, offset);
+    class->magic = smallEndianToBigEndian4Bytes(readU4(fp, offset));
     offset += 4;
 
     class->minorVersion = smallEndianToBigEndian2Bytes(readU2(fp, offset));
@@ -71,7 +71,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
                 (*offset) += 2;
                 cpInfo[cpIndex].utf8Const.bytes = (u1*) allocate((cpInfo[cpIndex].utf8Const.length) * sizeof(u1));
                 for (int utf8Index = 0; utf8Index < (cpInfo[cpIndex].utf8Const.length); utf8Index++) {
-                    cpInfo[cpIndex].utf8Const.bytes[utf8Index] = smallEndianToBigEndian1Byte(readU1(fp, (*offset)));
+                    cpInfo[cpIndex].utf8Const.bytes[utf8Index] = readU1(fp, (*offset));
                     (*offset)++;
                 }
                 break;
@@ -87,17 +87,23 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
                 break;
 
             case LONG:
-                cpInfo[cpIndex].longConst.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].longConst.bytes.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
-                cpInfo[cpIndex].longConst.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].longConst.bytes.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
+                // This field are stored in two indexes
+                cpIndex++;
+                cpInfo[cpIndex].tag = LARGE_NUMERIC_CONTINUED;
                 break;
 
             case DOUBLE:
-                cpInfo[cpIndex].doubleConst.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].doubleConst.bytes.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
-                cpInfo[cpIndex].doubleConst.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].doubleConst.bytes.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
+                // This field are stored in two indexes
+                cpIndex++;
+                cpInfo[cpIndex].tag = LARGE_NUMERIC_CONTINUED;
                 break;
 
             case CLASS:
@@ -139,7 +145,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
                 break;
 
             default:
-                printf("Error while reading classfile");
+                printf("Error while reading classfile on position: %ld\n", ftell(fp));
         }
 
     }
