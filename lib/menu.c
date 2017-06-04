@@ -402,11 +402,8 @@ void showMethods(){
         for (j = 0; j < 2; ++j)
         {
             printf( "\n- Att %d -\n", j);
-            //printf("Attribute length: %-48d\n", class->methods[methodsIndex].attributes[j].attributeLength);
-            //printf("NAME:  cp_info#%-48d\n", class->methods[methodsIndex].attributes[j].attributeNameIndex);
-            //printf("DESCRIPTOR: cp_info#%-48d\n", class->methods[methodsIndex].attributes[j].fieldInfo);
-            //fputs("Attribute info:\n", out);
-            //fputs("\tTipo: ", out);
+            printf("Attribute name index:  cp_info#%-48d\n", class->methods[methodsIndex].attributes[j].attributeNameIndex);
+            printf("Attribute length: %-48d\n", class->methods[methodsIndex].attributes[j].attributeLength);       
 
         }
         
