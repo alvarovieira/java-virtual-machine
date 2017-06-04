@@ -77,7 +77,7 @@ typedef struct _const_pool_info ConstPoolInfo;
  struct _attribute_info {
         u2 attributeNameIndex;
         u4 attributeLength;
-        u1 *filedInfo;
+        u1 *fieldInfo;
  };
 
  /**
@@ -100,7 +100,7 @@ struct _method_info {
     u2 nameIndex;
     u2 descriptorIndex;
     u2 attributesCount;
-    attributeInfo attributes;
+    attributeInfo *attributes;
 };
 
 /**
@@ -149,6 +149,7 @@ struct _class {
     u2 superClass;
     u2 interfacesCount;
     u2 *interfaces;
+    
     u2 fieldsCount;
     fieldInfo *fields;
     u2 methodsCount;
@@ -231,6 +232,32 @@ u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount);
  * @todo Parameters
  * @todo Return
  */
+
+fieldInfo * readFields (FILE* fp, int* offset, u2 fieldCount);
+ /**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+
+methodInfo* readMethods (FILE* fp, int* offset, u2 methodsCount);
+ /**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+
+attributeInfo* readAttributes (FILE* fp, int* offset, u2 attributesCount);
+ 
+ /**
+ * @todo Brief
+ * @todo Description
+ * @todo Parameters
+ * @todo Return
+ */
+
 u1 readU1(FILE* fp, int offset);
 
 /**

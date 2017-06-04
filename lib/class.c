@@ -13,6 +13,8 @@
 #include "convert.h"
 #include "class.h"
 
+
+
 Class* readClassfile(FILE* fp) {
     int offset = 0;
     Class* class = (Class*) malloc(sizeof(Class));
@@ -48,6 +50,18 @@ Class* readClassfile(FILE* fp) {
     class->fieldsCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
     offset += 2;
 
+    class->fields = readFields(fp, &offset, class->fieldsCount);
+/*
+    class->methodsCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
+    offset += 2;
+
+    class->methods = readMethods(fp, &offsetm class->methodsCount);
+
+    class->attributesCount = smallEndianToBigEndian2Bytes(readU2(fp, offset));
+    offset += 2;
+
+    class->attributes = readAttributes(fp, &offsetm class->attributesCount);
+*/
     return class;
 }
 
@@ -158,6 +172,92 @@ u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount) {
 
     return interfaces;
 }
+
+fieldInfo* readFields (FILE* fp, int* offset, u2 fieldsCount){
+/*  CAMPOS:
+    u2 access_flags;  
+    u2 name_index;
+    u2 descriptor_index;
+    u2 attributes_count;   
+    attribute_info attributes[attributes_count];
+*/
+
+    int count = 0;
+    fieldInfo* field = ((fieldInfo *) calloc (fieldsCount, sizeof(fieldInfo)));
+
+    for(count = 0; count < fieldsCount; count++)
+    {
+
+        field[count].accessFlags = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+            (*offset) +=2;
+        field[count].nameIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+            (*offset) +=2;
+        field[count].descriptorIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+            (*offset) +=2;
+        field[count].attributesCount = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+            (*offset) +=2;
+        field[count].attributes = readAttributes(fp, offset, field[count].attributesCount);
+    }
+
+    return field;
+
+}
+
+methodInfo* readMethods (FILE* fp, int* offset, u2 methodsCount) {
+/*  CAMPOS:
+    u2 access_flags; 
+    u2 name_index;   
+    u2 descriptor_index; 
+    u2 attributes_count;  
+    attribute_info attributes[attributes_count];
+*/
+
+    int count = 0;
+    methodInfo* method = (methodInfo*) calloc(methodsCount, sizeof(methodInfo));
+
+    for(count = 0; count < methodsCount; count++)
+        {
+
+            method[count].accessFlags = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+                (*offset) +=2;
+            method[count].nameIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+                (*offset) +=2;
+            method[count].descriptorIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+                (*offset) +=2;
+            method[count].attributesCount = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+                (*offset) +=2;
+            method[count].attributes = readAttributes(fp, offset, method[count].attributesCount);
+        }
+
+
+    return method;
+}
+
+attributeInfo* readAttributes (FILE* fp, int* offset, u2 attributesCount){
+/*  CAMPOS:
+    u2 attributeNameIndex;
+    u4 attributeLength;
+    u1 *filedInfo;
+*/
+    int count = 0;
+    attributeInfo* attribute = (attributeInfo*) calloc(attributesCount, sizeof(attributeInfo));
+
+    for(count = 0; count < attributesCount; count++)
+        {
+
+            attribute[count].attributeNameIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
+                (*offset) +=2;
+            attribute[count].attributeLength = smallEndianToBigEndian4Bytes(readU4(fp,(*offset)));
+                (*offset) +=4;
+            attribute[count].fieldInfo = smallEndianToBigEndian1Byte(readU1(fp, (*offset)));
+                (*offset) +=1;
+        }
+
+
+    return attribute;
+}
+
+
 
 u1 readU1(FILE* fp, int offset) {
     return readByte(fp, offset);
