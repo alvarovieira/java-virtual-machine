@@ -129,7 +129,8 @@ void viewer() {
             printf("| -1) Contant pool                                             |\n");
             printf("| -2) Interfaces                                               |\n");
             printf("| -3) Methods                                                  |\n");
-            printf("| -4) Attributes                                                 |\n");
+            printf("| -4) Attributes                                               |\n");
+            printf("| -5) Fields                                                   |\n");
             printf("|--------------------------------------------------------------|\n");
             printf("| 1) Choose another .class file                                |\n");
         
@@ -193,6 +194,13 @@ void viewerOption(int userOption) {
         case -4:
             if (userfilePointer != NULL && userfilePath[0] != '\0') {
                 //showAttributes();
+            } else {
+                printf("Invalid option! Please choose a valid one.\n");
+            }
+            break; 
+        case -5:
+            if (userfilePointer != NULL && userfilePath[0] != '\0') {
+                showFields();
             } else {
                 printf("Invalid option! Please choose a valid one.\n");
             }
@@ -479,9 +487,42 @@ void showMethods(){
         }
         
     }
-
 }
 
+void showFields (){
+
+    int count = 0, i = 0;
+
+    if(class->fieldsCount == 0){
+        printf("Empty Array\n");
+        return;
+    }
+    printf("|==============================================================|\n");
+    printf("|                           Fields                            |\n");
+    printf("|==============================================================|\n");
+    printf("Methods Count: %d \n\n", class->fieldsCount);
+
+    for (count = 0; count < class->fieldsCount; count++){
+        printf("| Access Flag: %-42d | \n",class->fields[count].accessFlags);
+        printf("| Name Index: %-43d | \n",class->fields[count].nameIndex);
+        printf("| Descriptor Index: %-38d | \n",class->fields[count].descriptorIndex);
+        printf("| Attributes Count: %-38d | \n",class->fields[count].attributesCount);
+
+        for (i = 0; i < class->fields[count].attributesCount; i++){   
+            printf("Attribute name index:  cp_info#%-48d\n", class->fields[count].attributes[i].attributeNameIndex);
+            printf("Attribute length: %-48d\n", class->fields[count].attributes[i].attributeLength);       
+
+
+        }
+
+    }
+
+
+
+
+
+
+} 
 void jvm() {
     int userOption;
     char* shortname = NULL;

@@ -70,6 +70,8 @@ void showMethods();
 
 void showInterfaces();
 
+void showFields();
+
 /**
  * @brief Shows JVM execution menu.
  * 
