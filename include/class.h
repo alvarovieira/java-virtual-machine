@@ -16,7 +16,15 @@
  * @todo Description
  */
 struct _const_pool_info {
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u1 tag;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     union {
         struct {
             u2 nameIndex;
@@ -48,15 +56,28 @@ struct _const_pool_info {
             u4 bytes;
         } integerConst;
         struct {
-            u4 bytes;
+            union {
+                u4 bytes;
+                float value;
+            };
         } floatConst;
         struct {
-            u4 highBytes;
-            u4 lowBytes;
+            union {
+                struct {
+                    u4 lowBytes;
+                    u4 highBytes;
+                } bytes;
+                long int value;
+            };
         } longConst;
         struct {
-            u4 highBytes;
-            u4 lowBytes;
+            union {
+                struct {
+                    u4 lowBytes;
+                    u4 highBytes;
+                } bytes;
+                double value;
+            };
         } doubleConst;
     };
 };
@@ -139,17 +160,52 @@ typedef struct _field_info fieldInfo;
  */
 
 struct _class {
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u4 magic;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 majorVersion;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 minorVersion;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 constantPoolCount;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     ConstPoolInfo* constantPool;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 accessFlags;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 thisClass;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 superClass;
+    /**
+     * @todo Brief
+     * @todo Description
+     */
     u2 interfacesCount;
     u2 *interfaces;
-    
     u2 fieldsCount;
     fieldInfo *fields;
     u2 methodsCount;
@@ -174,6 +230,7 @@ typedef struct _class Class;
  */
 
 enum {
+    LARGE_NUMERIC_CONTINUED = 0,
     UTF8 = 1,
     INTEGER = 3,
     FLOAT = 4,

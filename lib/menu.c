@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "mem-manager.h"
 #include "class.h"
+#include "convert.h"
 #include "common.h"
 #include "file.h"
 #include "menu.h"
@@ -62,6 +64,8 @@ void menu() {
             if (userfilePointer != NULL) {
                 closeFile(&userfilePointer);
             }
+            // Free all allocated memory
+            freeMemManager();
 
             break;
         }
@@ -215,6 +219,10 @@ void showConstantPool() {
         int cpIndex;
         for (cpIndex = 0; cpIndex < class->constantPoolCount - 1; cpIndex++) {
             switch(class->constantPool[cpIndex].tag) {
+                case LARGE_NUMERIC_CONTINUED:
+                    printf("| [%-3d] (large numeric continued)                              |\n", cpIndex + 1);
+                    break;
+                    
                 case UTF8:
                     printf("| [%-3d] CONSTANT_Utf8_Info                                     |\n", cpIndex + 1);
                     break;
@@ -283,7 +291,11 @@ void showConstantPool() {
                 // Verify index correctness
                 if (chosenConst > 0 && chosenConst < (class->constantPoolCount)) {
                     clearScreen();
-                    showContant(class->constantPool[chosenConst - 1]);
+                    if (class->constantPool[chosenConst - 1].tag == LARGE_NUMERIC_CONTINUED) {
+                        // Show the previous element, which has to be a long or a double
+                        showConstant(class->constantPool[chosenConst - 2]);
+                    }
+                    showConstant(class->constantPool[chosenConst - 1]);
                     break;
                 } else {
                     printf("Invalid option! Please choose a valid one.\n");
@@ -299,7 +311,7 @@ void showConstantPool() {
     }
 }
 
-void showContant(ConstPoolInfo cpInfo) {
+void showConstant(ConstPoolInfo cpInfo) {
     printf("|==============================================================|\n");
     switch(cpInfo.tag) {
         case UTF8:
@@ -347,9 +359,68 @@ void showContant(ConstPoolInfo cpInfo) {
             break;
     }
     printf("|==============================================================|\n");
-    // TODO: Fazer o vizualizador de cada tipo de cp_info
+    char* string = NULL;
+    switch(cpInfo.tag) {
+        case UTF8:
+            string = utf8ToString(cpInfo.utf8Const.bytes, cpInfo.utf8Const.length);
+            printf("| Length of bytes array: %-37d |\n", cpInfo.utf8Const.length);
+            printf("| Length of string:      %-37zu |\n", strlen(string));
+            printf("| String:                %-37s |\n", string);
+            deallocate( (void**) &string );
+            break;
+
+        case INTEGER:
+            printf("| Bytes:   0x%.8X                                          |\n", cpInfo.integerConst.bytes);
+            printf("| Integer: %-51d |\n", cpInfo.integerConst.bytes);
+            break;
+
+        case FLOAT:
+            printf("| Bytes: 0x%.8X                                            |\n", cpInfo.integerConst.bytes);
+            printf("| Float: %-53f |\n", cpInfo.floatConst.value);
+            break;
+
+        case LONG:
+            printf("| High bytes: 0x%.8X                                       |\n", cpInfo.longConst.bytes.highBytes);
+            printf("| Low bytes:  0x%.8X                                       |\n", cpInfo.longConst.bytes.lowBytes);
+            printf("| Long:       %-48ld |\n", cpInfo.longConst.value);
+            break;
+
+        case DOUBLE:
+            printf("| High bytes: 0x%.8X                                       |\n", cpInfo.doubleConst.bytes.highBytes);
+            printf("| Low bytes:  0x%.8X                                       |\n", cpInfo.doubleConst.bytes.lowBytes);
+            printf("| Double:     %-48lf |\n", cpInfo.doubleConst.value);
+            break;
+
+        case CLASS:
+            printf("| Class name: cp_info #%-39d |\n", cpInfo.classConst.nameIndex);
+            break;
+
+        case STRING:
+            printf("| String: cp_info #%-43d |\n", cpInfo.stringConst.stringIndex);
+            break;
+
+        case FIELD_REF:
+            printf("| Class name:    cp_info #%-36d |\n", cpInfo.fieldRefConst.classIndex);
+            printf("| Name and type: cp_info #%-36d |\n", cpInfo.fieldRefConst.nameAndTypeIndex);
+            break;
+
+        case METHOD_REF:
+            printf("| Class name:    cp_info #%-36d |\n", cpInfo.methodRefConst.classIndex);
+            printf("| Name and type: cp_info #%-36d |\n", cpInfo.methodRefConst.nameAndTypeIndex);
+            break;
+
+        case INTERFACE_METHOD_REF:
+            printf("| Class name:    cp_info #%-36d |\n", cpInfo.interfaceMethodRefConst.classIndex);
+            printf("| Name and type: cp_info #%-36d |\n", cpInfo.interfaceMethodRefConst.nameAndTypeIndex);
+            break;
+
+        case NAME_AND_TYPE:
+            printf("| Name:       cp_info #%-39d |\n", cpInfo.nameAndTypeConst.nameIndex);
+            printf("| Descriptor: cp_info #%-39d |\n", cpInfo.nameAndTypeConst.descriptorIndex);
+            break;
+    }
     printf("|==============================================================|\n");
-    printf("Press enter to return...\n");
+    printf("Press ENTER to return...");
     while(getchar() != '\n');
     clearScreen();
 }
@@ -367,7 +438,7 @@ void showInterfaces() {
     printf("|==============================================================|\n");
 
     for (interfacesIndex = 0; interfacesIndex < class->interfacesCount; interfacesIndex++) {
-        printf("| cp_info #%-48d |\n", class->interfaces[interfacesIndex]);
+        printf("| cp_info #%-51d |\n", class->interfaces[interfacesIndex]);
     }
     printf("|==============================================================|\n");
     printf("Press enter to return...\n");

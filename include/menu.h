@@ -59,7 +59,7 @@ void showConstantPool();
  * @todo Brief
  * @todo Description
  */
-void showContant(ConstPoolInfo cpInfo);
+void showConstant(ConstPoolInfo cpInfo);
 
 /**
  * @todo Brief

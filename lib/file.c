@@ -10,11 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "mem-manager.h"
 #include "file.h"
 
 FILE* openFile(char filename[255], char* mode) {
     /* somente para agilizar os testes */
-    FILE* fp = fopen("/Users/victorguedes/Documents/UnB/sb/java-virtual-machine/etc/Program.class", mode);
+    FILE* fp = fopen("/Users/victorguedes/Documents/UnB/sb/java-virtual-machine/etc/HelloWorld.class", mode);
     //FILE* fp = fopen(filename, mode);
     if (fp == NULL) {
         printf("An error occurr while trying to open the file\n");
@@ -26,7 +27,7 @@ uint8_t* read(FILE* fp, int offset, int bytes) {
     uint8_t* content;
 
     // Alocate with file size
-    content = (uint8_t*) malloc(sizeof(uint8_t) * bytes);
+    content = (uint8_t*) allocate(sizeof(uint8_t) * bytes);
 
     // Read file
     fseek(fp, offset, SEEK_SET);

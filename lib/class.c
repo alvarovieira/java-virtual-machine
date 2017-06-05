@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "mem-manager.h"
 #include "file.h"
 #include "convert.h"
 #include "class.h"
@@ -17,9 +18,9 @@
 
 Class* readClassfile(FILE* fp) {
     int offset = 0;
-    Class* class = (Class*) malloc(sizeof(Class));
+    Class* class = (Class*) allocate(sizeof(Class));
 
-    class->magic = readU4(fp, offset);
+    class->magic = smallEndianToBigEndian4Bytes(readU4(fp, offset));
     offset += 4;
 
     class->minorVersion = smallEndianToBigEndian2Bytes(readU2(fp, offset));
@@ -69,7 +70,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
     int cpIndex;
 
     // Allocate space for the costant pool
-    ConstPoolInfo* cpInfo = (ConstPoolInfo*) malloc(cpCount * sizeof(ConstPoolInfo));
+    ConstPoolInfo* cpInfo = (ConstPoolInfo*) allocate(cpCount * sizeof(ConstPoolInfo));
 
     for (cpIndex = 0; cpIndex < cpCount; cpIndex++) {
 
@@ -82,9 +83,9 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
             case UTF8:
                 cpInfo[cpIndex].utf8Const.length = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
                 (*offset) += 2;
-                cpInfo[cpIndex].utf8Const.bytes = (u1*) malloc((cpInfo[cpIndex].utf8Const.length) * sizeof(u1));
+                cpInfo[cpIndex].utf8Const.bytes = (u1*) allocate((cpInfo[cpIndex].utf8Const.length) * sizeof(u1));
                 for (int utf8Index = 0; utf8Index < (cpInfo[cpIndex].utf8Const.length); utf8Index++) {
-                    cpInfo[cpIndex].utf8Const.bytes[utf8Index] = smallEndianToBigEndian1Byte(readU1(fp, (*offset)));
+                    cpInfo[cpIndex].utf8Const.bytes[utf8Index] = readU1(fp, (*offset));
                     (*offset)++;
                 }
                 break;
@@ -100,17 +101,23 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
                 break;
 
             case LONG:
-                cpInfo[cpIndex].longConst.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].longConst.bytes.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
-                cpInfo[cpIndex].longConst.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].longConst.bytes.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
+                // This field are stored in two indexes
+                cpIndex++;
+                cpInfo[cpIndex].tag = LARGE_NUMERIC_CONTINUED;
                 break;
 
             case DOUBLE:
-                cpInfo[cpIndex].doubleConst.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].doubleConst.bytes.highBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
-                cpInfo[cpIndex].doubleConst.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
+                cpInfo[cpIndex].doubleConst.bytes.lowBytes = smallEndianToBigEndian4Bytes(readU4(fp, (*offset)));
                 (*offset) += 4;
+                // This field are stored in two indexes
+                cpIndex++;
+                cpInfo[cpIndex].tag = LARGE_NUMERIC_CONTINUED;
                 break;
 
             case CLASS:
@@ -152,7 +159,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
                 break;
 
             default:
-                printf("Error while reading classfile");
+                printf("Error while reading classfile on position: %ld\n", ftell(fp));
         }
 
     }
@@ -163,7 +170,7 @@ ConstPoolInfo* readConstantPool(FILE* fp, int* offset, u2 cpCount) {
 u2* readInterfaces(FILE* fp, int* offset, u2 interfacesCount) {
     int interfacesIndex;
 
-    u2* interfaces = (u2*) malloc(interfacesCount * sizeof(u2));
+    u2* interfaces = (u2*) allocate(interfacesCount * sizeof(u2));
 
     for (interfacesIndex = 0; interfacesIndex < interfacesCount; interfacesIndex++) {
         interfaces[interfacesIndex] = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
@@ -219,14 +226,23 @@ methodInfo* readMethods (FILE* fp, int* offset, u2 methodsCount) {
         {
 
             method[count].accessFlags = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
-                (*offset) +=2;
+            printf("Access Flags: %d\n", method[count].accessFlags);
+            (*offset) +=2;
+            
             method[count].nameIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
-                (*offset) +=2;
+            printf("Name index: %d\n", method[count].nameIndex);
+            (*offset) +=2;
+            
             method[count].descriptorIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
-                (*offset) +=2;
+            printf("descriptorIndex: %d\n", method[count].descriptorIndex);
+            (*offset) +=2;
+            
             method[count].attributesCount = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
-                (*offset) +=2;
+            (*offset) +=2;
+            printf("attributesCount: %d\n", method[count].attributesCount);
+            
             method[count].attributes = readAttributes(fp, offset, method[count].attributesCount);
+            getchar();
         }
 
 
@@ -244,13 +260,18 @@ attributeInfo* readAttributes (FILE* fp, int* offset, u2 attributesCount){
 
     for(count = 0; count < attributesCount; count++)
         {
-
+            
             attribute[count].attributeNameIndex = smallEndianToBigEndian2Bytes(readU2(fp, (*offset)));
                 (*offset) +=2;
             attribute[count].attributeLength = smallEndianToBigEndian4Bytes(readU4(fp,(*offset)));
                 (*offset) +=4;
-            attribute[count].fieldInfo = smallEndianToBigEndian1Byte(readU1(fp, (*offset)));
-                (*offset) +=1;
+            attribute[count].fieldInfo = smallEndianToBigEndian2Bytes(readU1(fp, (*offset)));
+                (*offset) +=2;
+            printf("---- ATTRIBUTE\n");
+            printf("Name index: %d\n", attribute[count].attributeNameIndex);
+            printf("attributeLength: %d\n", attribute[count].attributeLength);
+            printf("fieldInfo: %d\n", attribute[count].fieldInfo);
+            getchar();    
         }
 
 
